@@ -51,31 +51,24 @@ def forecast_then(now: datetime, then: datetime) -> dict:
     # get date from datetime
     date = then.date()
 
-    affected_rows_temp = data["temperature"][
-        data["temperature"]["event_start"].dt.date == date
-    ]
-    affected_rows_irradiance = data["irradiance"][
-        data["irradiance"]["event_start"].dt.date == date
-    ]
-    affected_rows_wind_speed = data["wind_speed"][
-        data["wind_speed"]["event_start"].dt.date == date
-    ]
+    temp_date_condition = data["temperature"]["event_start"].dt.date == date
+    irradiance_date_condition = data["irradiance"]["event_start"].dt.date == date
+    wind_speed_date_condition = data["wind_speed"]["event_start"].dt.date == date
+
+    # get affected rows
+    affected_rows_temp = data["temperature"][temp_date_condition]
+    affected_rows_irradiance = data["irradiance"][irradiance_date_condition]
+    affected_rows_wind_speed = data["wind_speed"][wind_speed_date_condition]
 
     # get belief horizon minimums
-    temp_min = affected_rows_temp["belief_horizon_in_sec"].min()
-    irradiance_min = affected_rows_irradiance["belief_horizon_in_sec"].min()
-    wind_speed_min = affected_rows_wind_speed["belief_horizon_in_sec"].min()
+    temp_min_index = affected_rows_temp["belief_horizon_in_sec"].idxmin()
+    irradiance_min_index = affected_rows_irradiance["belief_horizon_in_sec"].idxmin()
+    wind_speed_min_index = affected_rows_wind_speed["belief_horizon_in_sec"].idxmin()
 
     # get the event_value for the minimum belief horizon
-    temp_val = affected_rows_temp[
-        affected_rows_temp["belief_horizon_in_sec"] == temp_min
-    ]["event_value"].values[0]
-    irradiance_val = affected_rows_irradiance[
-        affected_rows_irradiance["belief_horizon_in_sec"] == irradiance_min
-    ]["event_value"].values[0]
-    wind_speed_val = affected_rows_wind_speed[
-        affected_rows_wind_speed["belief_horizon_in_sec"] == wind_speed_min
-    ]["event_value"].values[0]
+    temp_val = affected_rows_temp.loc[temp_min_index, "event_value"]
+    irradiance_val = affected_rows_irradiance.loc[irradiance_min_index, "event_value"]
+    wind_speed_val = affected_rows_wind_speed.loc[wind_speed_min_index, "event_value"]
 
     most_recent_forecasts = {
         "temperature": str(temp_val) + " °C",
@@ -120,7 +113,7 @@ def forecast_tomorrow(now: datetime) -> dict:
         sunny = True
 
     # check if the average wind speed is above 5 m/s
-    if wind_speed_val > 5:
+    if wind_speed_val >= 4:
         windy = True
 
     tomorrow_forecasts = {
