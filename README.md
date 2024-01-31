@@ -15,13 +15,13 @@ git clone https://github.com/joshuaunity/seicast-api.git
 
 cd seicast-api
 
-# On Unix or MacOS
+# Create & Activate venv On Unix or MacOS 
 python3 -m venv venv
 
-# On Windows
-python -m venv venv
-
 source venv/bin/activate
+
+# Create & Activate venv  On Windows
+python -m venv venv
 
 .\venv\Scripts\activate
 
