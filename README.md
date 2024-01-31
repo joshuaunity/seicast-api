@@ -1,10 +1,12 @@
 # FastAPI Project Setup
 
-This guide will walk you through the process of setting up a FastAPI project with a virtual environment. FastAPI is a modern, fast (high-performance), web framework for building APIs with Python 3.7+ based on standard Python type hints.
+This guide will walk you through the process of setting up the FastAPI project with a virtual environment or with docker.
 
 ## Prerequisites
 
 Make sure you have Python 3.7 or higher installed on your system. You can download Python from [python.org](https://www.python.org/downloads/).
+
+For use with docker make sure you have docker desktop installed on your system. You can download docker desktop from [docker.com](https://www.docker.com/products/docker-desktop/).
 
 ## 1. Clone the Repository
 
