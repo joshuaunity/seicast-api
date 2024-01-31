@@ -4,12 +4,6 @@ from functools import lru_cache
 import pandas as pd
 
 
-# def update_datetime(row) -> datetime:
-#     # print("====================", type(row["event_start"]))
-#     # print("====================", type(timedelta(seconds=row["belief_horizon_in_sec"])))
-#     return row["event_start"] + timedelta(seconds=row["belief_horizon_in_sec"])
-
-
 file = "./weather.csv"
 df = pd.read_csv(file)
 df["event_start"] = pd.to_datetime(df["event_start"])
