@@ -1,3 +1,4 @@
+import uvicorn
 from datetime import datetime
 from fastapi import FastAPI, status, HTTPException, Request
 from fastapi.responses import JSONResponse
@@ -22,9 +23,9 @@ def welcome_page():
 
 @app.post("/forecast")
 async def forecast(request: Request):
-    request = await request.json()
-    now = request["now"]
-    then = request["then"]
+    request: dict = await request.json()
+    now: datetime = request["now"]
+    then: datetime = request["then"]
     now = datetime.strptime(now, "%Y-%m-%d %H:%M:%S%z")
     then = datetime.strptime(then, "%Y-%m-%d %H:%M:%S%z")
 
@@ -66,3 +67,7 @@ async def tomorrow(request: Request):
     # get the forecast
     forecast: dict = forecast_tomorrow(now)
     return JSONResponse(status_code=status.HTTP_200_OK, content=forecast)
+
+
+if __name__ == "__main__":
+    uvicorn.run(app, host="0.0.0.0", port=8000, log_level="info")
